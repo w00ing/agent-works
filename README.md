@@ -1,6 +1,6 @@
 # Codex Grove (2D Codex Process Visualizer)
 
-A small PixiJS + TypeScript visualizer that turns Codex processes into 8-bit characters. Each agent animates while working and shows a completion emote when done.
+A small Phaser + TypeScript visualizer that turns Codex processes into 8-bit characters. Each agent animates while working and shows a completion emote when done.
 
 ## Quick start
 
@@ -13,7 +13,7 @@ Open the dev server URL printed by Vite.
 
 ## How it works
 
-- **PixiJS** renders a simple 2D scene with pixel-art sprites.
+- **Phaser** renders a simple 2D scene with pixel-art sprites.
 - **Agents** are managed by a small state machine (`idle`, `working`, `done`).
 - **Events** drive the visuals. You can emit events from the console or via WebSocket.
 
@@ -59,6 +59,6 @@ Sprites are CC0 and sourced from OpenGameArt. See `ASSET_LICENSES.md`.
 
 ## Project layout
 
-- `src/main.ts` - app bootstrap, mock generator, WebSocket bridge.
-- `src/visualizer.ts` - Pixi scene, agent logic, asset slicing.
+- `src/main.ts` - Phaser bootstrap, mock generator, WebSocket bridge.
+- `src/visualizer.ts` - Phaser scene, agent logic, asset slicing.
 - `public/assets/` - sprite sheets and icons.

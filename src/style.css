@@ -8,8 +8,8 @@
 
 body {
   margin: 0;
-  background: #0a0f17;
-  color: #e2e8f0;
+  background: #0b1016;
+  color: #f5e7d4;
   font-family: 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
 }
 
@@ -28,39 +28,52 @@ canvas {
 
 #hud {
   position: absolute;
-  top: 18px;
+  bottom: 18px;
   left: 18px;
   z-index: 10;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: rgba(15, 23, 36, 0.88);
-  border: 1px solid rgba(99, 116, 139, 0.4);
-  box-shadow: 0 12px 36px rgba(6, 9, 15, 0.4);
-  backdrop-filter: blur(6px);
+  width: 220px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(58, 37, 22, 0.92), rgba(32, 22, 14, 0.96));
+  border: 1px solid rgba(124, 88, 48, 0.8);
+  box-shadow: 0 12px 30px rgba(10, 6, 4, 0.55);
 }
 
 #hud .title {
-  font-size: 12px;
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #93c5fd;
+  color: #f1c27d;
 }
 
 #hud .subtitle {
   margin-top: 4px;
-  font-size: 13px;
-  color: #e2e8f0;
+  font-size: 11px;
+  color: #c7a277;
+}
+
+#hud .section {
+  margin-top: 12px;
+}
+
+#hud .section-title {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f5d7a1;
+  margin-bottom: 6px;
 }
 
 #hud .row {
-  margin-top: 8px;
-  font-size: 11px;
-  color: #cbd5f5;
+  margin-top: 6px;
+  font-size: 10px;
+  color: #e7d2b6;
 }
 
 #hud code {
-  background: rgba(30, 41, 59, 0.7);
+  background: rgba(24, 16, 10, 0.8);
   padding: 2px 4px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 9px;
+  color: #f0e0c0;
 }

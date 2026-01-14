@@ -1,6 +1,6 @@
 import './style.css'
-import { Application } from 'pixi.js'
-import { CodexVisualizer, loadVisualizerAssets, type CodexEvent } from './visualizer'
+import Phaser from 'phaser'
+import { CodexScene, type CodexEvent } from './visualizer'
 
 const appRoot = document.querySelector<HTMLDivElement>('#app')
 
@@ -13,48 +13,55 @@ const mockEnabled = params.get('mock') !== '0'
 const doneIconIndex = Number(params.get('icon') ?? 0)
 const wsUrl = params.get('ws')
 
-const app = new Application()
-await app.init({
-  antialias: false,
-  backgroundColor: 0x0a0f17,
+const scene = new CodexScene(Number.isFinite(doneIconIndex) ? doneIconIndex : 0)
+
+const game = new Phaser.Game({
+  type: Phaser.AUTO,
+  parent: appRoot,
+  backgroundColor: '#0a0f17',
+  pixelArt: true,
+  roundPixels: true,
+  scale: {
+    mode: Phaser.Scale.RESIZE,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  scene: [scene],
 })
 
-app.renderer.roundPixels = true
-appRoot.prepend(app.canvas)
+game.events.once(Phaser.Core.Events.READY, () => {
+  const activeScene = game.scene.getScene('CodexScene') as CodexScene
 
-const assets = await loadVisualizerAssets(Number.isFinite(doneIconIndex) ? doneIconIndex : 0)
-const visualizer = new CodexVisualizer(app, assets)
+  const emit = (event: CodexEvent | CodexEvent[]) => activeScene.emit(event)
 
-const resize = () => {
-  app.renderer.resize(window.innerWidth, window.innerHeight)
-  visualizer.resize(app.renderer.width, app.renderer.height)
+  ;(window as any).codexViz = {
+    emit,
+    spawn: (id: string, name?: string) => emit({ type: 'spawn', id, name }),
+    work: (id: string, label?: string) => emit({ type: 'work', id, label }),
+    idle: (id: string, label?: string) => emit({ type: 'idle', id, label }),
+    done: (id: string, label?: string) => emit({ type: 'done', id, label }),
+    remove: (id: string) => emit({ type: 'remove', id }),
+  }
+
+  updateHud(mockEnabled, wsUrl ?? undefined)
+
+  if (mockEnabled) {
+    startMock(activeScene)
+  }
+
+  if (wsUrl) {
+    connectWebSocket(activeScene, wsUrl)
+  }
+})
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    game.destroy(true)
+  })
 }
 
-resize()
-window.addEventListener('resize', resize)
-
-updateHud(mockEnabled, wsUrl ?? undefined)
-
-const emit = (event: CodexEvent | CodexEvent[]) => visualizer.emit(event)
-
-;(window as any).codexViz = {
-  emit,
-  spawn: (id: string, name?: string) => emit({ type: 'spawn', id, name }),
-  work: (id: string, label?: string) => emit({ type: 'work', id, label }),
-  idle: (id: string, label?: string) => emit({ type: 'idle', id, label }),
-  done: (id: string, label?: string) => emit({ type: 'done', id, label }),
-  remove: (id: string) => emit({ type: 'remove', id }),
-}
-
-if (mockEnabled) {
-  startMock(visualizer)
-}
-
-if (wsUrl) {
-  connectWebSocket(visualizer, wsUrl)
-}
-
-function startMock(target: CodexVisualizer): void {
+function startMock(target: CodexScene): void {
   let counter = 1
   const active = new Set<string>()
 
@@ -89,7 +96,7 @@ function startMock(target: CodexVisualizer): void {
   }, 2200)
 }
 
-function connectWebSocket(target: CodexVisualizer, url: string): void {
+function connectWebSocket(target: CodexScene, url: string): void {
   const status = document.querySelector<HTMLSpanElement>('#hud-ws')
 
   const socket = new WebSocket(url)
