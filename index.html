@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codex Grove</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="hud">
+        <div class="title">Codex Grove</div>
+        <div class="subtitle">2D agent visualizer</div>
+        <div class="row">Mock mode: <span id="hud-mock">on</span></div>
+        <div class="row">WebSocket: <span id="hud-ws">disabled</span> <code>?ws=ws://localhost:8787</code></div>
+        <div class="row">Emit events: <code>window.codexViz.emit(...)</code></div>
+        <div class="row">Icon tile: <code>?icon=7</code></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
